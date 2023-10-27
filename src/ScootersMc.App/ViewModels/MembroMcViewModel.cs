@@ -27,11 +27,11 @@ namespace ScootersMc.App.ViewModels
         public string Email { get; set; }
 
         [Required(ErrorMessage ="O campo {0} é obrigatório")]
-        public int Hierarquia { get; set; }
+        public HierarquiaViewModel Hierarquia { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [DisplayName("Tipo Sanguineo")]
-        public int TipoSanguineo { get; set; }
+        public TipoSanguineoViewModel TipoSanguineo { get; set; }
         
         public DateTime DataNascimento { get; set; }
 
@@ -51,9 +51,29 @@ namespace ScootersMc.App.ViewModels
         public bool Ativo { get; set; }
 
         /* Entity FrameWorks Relations */
-        public IEnumerable<ContatoEmergenciaViewModel> ContatosEmergencia { get; set; }
-        public ContatoEmergencia ContatoEmergencia { get; set; }
+        public ContatoEmergenciaViewModel ContatoEmergencia { get; set; }
 
-        public Endereco Endereco { get; set; }
+        public EnderecoViewModel Endereco { get; set; }
     }
+}
+public enum TipoSanguineoViewModel
+{
+    Nenhum = 1,
+    A_Positivo,
+    A_Negativo,
+    B_Positivo,
+    B_Negativo,
+    O_Positivo,
+    O_Negativo,
+    AB_Positivo,
+    AB_Negativo
+}
+
+public enum HierarquiaViewModel
+{
+    Nenhum = 1,
+    Prospect,
+    Soldado,
+    VPresidente,
+    Presidente
 }

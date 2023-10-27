@@ -40,7 +40,7 @@ namespace ScootersMc.App.Controllers
 
         public async Task<IActionResult> Details(Guid id)
         {
-            var MembroMcViewModel = ObterMembroContatosEndereco(id);
+            var MembroMcViewModel = await ObterMembroContatosEndereco(id);
 
             if (MembroMcViewModel == null)
             {
@@ -72,8 +72,6 @@ namespace ScootersMc.App.Controllers
 
             membroMcViewModel.Imagem = imgPrefixo + membroMcViewModel.ImagemUpload.FileName;
 
-            
-
             // Testar a implementação da imagem
 
             await _membrosRepository.Adicionar( _mapper.Map<MembroMc>(membroMcViewModel));
@@ -83,7 +81,7 @@ namespace ScootersMc.App.Controllers
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var membromc = ObterMembroContatosEndereco(id);
+            var membromc = await ObterMembroContatosEndereco(id);
 
             if(membromc == null) { return NotFound(); }
 

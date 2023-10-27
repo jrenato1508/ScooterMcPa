@@ -26,8 +26,6 @@ namespace ScootersMc.Business.Models
 
         public DateTime DataAlteracao { get; set; }
 
-        public IEnumerable<ContatoEmergencia> ContatoEmergencia { get; set; }
-
         public int Idade { get; set; }
 
         public string Telefone { get; set; }
@@ -35,5 +33,7 @@ namespace ScootersMc.Business.Models
         public bool Ativo { get; set; }
 
         public Endereco Endereco { get; set; }
+
+        public ContatoEmergencia ContatoEmergencia { get; set; }
     }
 }

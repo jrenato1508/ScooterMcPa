@@ -34,7 +34,7 @@ namespace ScootersMc.App.Controllers
 
         public async Task<IActionResult> Details(Guid id)
         {
-            var Contato = ObterContatoEmergencial(id);
+            var Contato = await ObterContatoEmergencial(id);
             
             if (Contato == null) return NotFound();
 

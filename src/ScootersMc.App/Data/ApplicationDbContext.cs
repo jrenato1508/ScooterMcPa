@@ -10,7 +10,7 @@ namespace ScootersMc.App.Data
             : base(options)
         {
         }
-        public DbSet<ScootersMc.App.ViewModels.ContatoEmergenciaViewModel> ContatoEmergenciaViewModel { get; set; }
+        
         
         
     }

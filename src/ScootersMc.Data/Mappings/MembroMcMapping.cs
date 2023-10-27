@@ -40,10 +40,8 @@ namespace ScootersMc.Data.Mappings
                 .WithOne(e => e.Membro);
 
             //Configuração Relacional 1 : N => Contatos de Emergencia  : Membro
-            builder.HasMany(m => m.ContatoEmergencia)
-                .WithOne(c => c.MembroMc)
-                .HasForeignKey(c => c.MembroMcId);
-
+            builder.HasOne(m => m.ContatoEmergencia)
+                .WithOne(c => c.MembroMc);
             builder.ToTable("MembrosMc");
         }
     }
