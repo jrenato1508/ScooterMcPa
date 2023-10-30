@@ -105,7 +105,7 @@ namespace ScootersMc.App.Controllers
 
         public async Task<IActionResult> Delete(Guid id)
         {
-            var membromc = ObterMembroContatosEndereco(id);
+            var membromc = await ObterMembroContatosEndereco(id);
             
             if(membromc == null) { return NotFound(); }
 

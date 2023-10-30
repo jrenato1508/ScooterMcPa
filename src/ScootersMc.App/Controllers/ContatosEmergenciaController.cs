@@ -61,7 +61,7 @@ namespace ScootersMc.App.Controllers
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var contato = ObterContatoEmergencial(id);
+            var contato = await ObterContatoEmergencial(id);
             if (contato == null) return NotFound();
 
             return View(contato);
@@ -85,7 +85,7 @@ namespace ScootersMc.App.Controllers
 
         public async Task<IActionResult> Delete(Guid id)
         {
-            var contato = ObterContatoEmergencial(id);
+            var contato = await ObterContatoEmergencial(id);
 
             if (contato == null) return NotFound();
 
