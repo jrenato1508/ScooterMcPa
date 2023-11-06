@@ -9,6 +9,6 @@ namespace ScootersMc.Business.Interfaces
 {
     public interface IEnderecoRepository : IRepository<Endereco>
     {
-        Task<Endereco> ObeterMembroFornecedorPorMembro(Guid id);
+        Task<Endereco> ObeterMembroEnderecoPorMembro(Guid id);
     }
 }

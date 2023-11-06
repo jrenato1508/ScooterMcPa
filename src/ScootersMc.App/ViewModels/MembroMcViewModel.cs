@@ -14,8 +14,8 @@ namespace ScootersMc.App.ViewModels
         [DisplayName("Imagem do Produto")]
         public IFormFile ImagemUpload { get; set; }
 
-        [Required(ErrorMessage ="O campo {0} é obrigatório")]
-        [StringLength(100,ErrorMessage ="O campo {0} precisa ter entre {2} e {1} caracteres",MinimumLength = 2)]
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [StringLength(100, ErrorMessage = "O campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = 2)]
         public string Nome { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
@@ -23,16 +23,19 @@ namespace ScootersMc.App.ViewModels
         public string Cpf { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        [EmailAddress(ErrorMessage ="Enderco de email inválido")]
+        [EmailAddress(ErrorMessage = "Enderco de email inválido")]
         public string Email { get; set; }
 
-        [Required(ErrorMessage ="O campo {0} é obrigatório")]
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public HierarquiaViewModel Hierarquia { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [DisplayName("Tipo Sanguineo")]
         public TipoSanguineoViewModel TipoSanguineo { get; set; }
-        
+
+        [DisplayName("Data de Nascimento")]
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
         public DateTime DataNascimento { get; set; }
 
         [ScaffoldColumn(false)]
@@ -55,25 +58,4 @@ namespace ScootersMc.App.ViewModels
 
         public EnderecoViewModel Endereco { get; set; }
     }
-}
-public enum TipoSanguineoViewModel
-{
-    Nenhum = 1,
-    A_Positivo,
-    A_Negativo,
-    B_Positivo,
-    B_Negativo,
-    O_Positivo,
-    O_Negativo,
-    AB_Positivo,
-    AB_Negativo
-}
-
-public enum HierarquiaViewModel
-{
-    Nenhum = 1,
-    Prospect,
-    Soldado,
-    VPresidente,
-    Presidente
 }

@@ -10,9 +10,9 @@ namespace ScootersMc.Data.Context
 {
     public class MeuDbContext : DbContext
     {
-        public MeuDbContext(DbContextOptions options):base(options)
+        public MeuDbContext(DbContextOptions options) : base(options)
         {
-                
+
         }
 
         public DbSet<MembroMc> MembrosMc { get; set; }
@@ -35,6 +35,24 @@ namespace ScootersMc.Data.Context
 
 
             base.OnModelCreating(modelBuilder);
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            foreach (var entry in ChangeTracker.Entries().Where(entry => entry.Entity.GetType().GetProperty("DataCadastro") != null))
+            {
+                if(entry.State == EntityState.Added)
+                {
+                    entry.Property("DataCadastro").CurrentValue = DateTime.Now;
+                }
+
+                if(entry.State == EntityState.Modified)
+                {
+                    entry.Property("DataAlteracao").CurrentValue = DateTime.Now;
+                }
+            }
+
+            return base.SaveChangesAsync(cancellationToken);
         }
     }
 }

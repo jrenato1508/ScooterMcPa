@@ -11,33 +11,40 @@ using Microsoft.EntityFrameworkCore;
 using ScootersMc.App.Data;
 using ScootersMc.App.ViewModels;
 using ScootersMc.Business.Interfaces;
+using ScootersMc.Business.Interfaces.IServices;
 using ScootersMc.Business.Models;
 using ScootersMc.Data.Context;
 using ScootersMc.Data.Repository;
 
 namespace ScootersMc.App.Controllers
 {
+    [Route("Membros-moto-clube")]
     public class MembrosMcController : BaseController
     {
         private readonly IMembroRepository _membrosRepository;
         private readonly IMapper _mapper;
         private readonly IContatoEmergenciaRepository _contatoEmergenciaRepository;
+        private readonly IMembroMcService _membroMcService;
 
         public MembrosMcController(IMembroRepository membroRepository,
                                    IMapper mapper,
-                                   IContatoEmergenciaRepository contato)
+                                   IContatoEmergenciaRepository contato,
+                                   IMembroMcService membroMcService)
         {
             _membrosRepository = membroRepository;
             _mapper = mapper;
             _contatoEmergenciaRepository = contato;
+            _membroMcService = membroMcService;
 
         }
 
+        [Route("lista-de-associados")]
         public async Task<IActionResult> Index()
         {
             return View(_mapper.Map<IEnumerable<MembroMcViewModel>>(await _membrosRepository.ObterTodos()));
         }
 
+        [Route("Detalhes-do-associado")]
         public async Task<IActionResult> Details(Guid id)
         {
             var MembroMcViewModel = await ObterMembroContatosEndereco(id);
@@ -49,22 +56,24 @@ namespace ScootersMc.App.Controllers
             return View(MembroMcViewModel);
         }
 
+        [Route("Adicionar-novo-associado")]
         public IActionResult Create()
         {
             return View();
         }
 
+        [Route("Adicionar-novo-associado")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create( MembroMcViewModel membroMcViewModel)
+        public async Task<IActionResult> Create(MembroMcViewModel membroMcViewModel)
         {
-            
+
             if (!ModelState.IsValid) return NotFound();
 
             CalcularIdade(membroMcViewModel);
 
             var imgPrefixo = Guid.NewGuid() + "_";
-            
+
             if (!await UpLoadArquivo(membroMcViewModel.ImagemUpload, imgPrefixo))
             {
                 return View(membroMcViewModel);
@@ -72,22 +81,29 @@ namespace ScootersMc.App.Controllers
 
             membroMcViewModel.Imagem = imgPrefixo + membroMcViewModel.ImagemUpload.FileName;
 
-            // Testar a implementação da imagem
+            /* Testar a implementação da imagem - OK
+             * Testar a Edição dos Filiados - OK
+             * Criei uma razoExtension para formatar telefone e cpf -OK
+             * Testar a Exclusão dos Afiliados(Implementar o Service Primeiro)
+             * Foi feito alguns ajustes das paginas Layout index e Detalhes além de ajustar algumas actions na controller 
+              */
 
-            await _membrosRepository.Adicionar( _mapper.Map<MembroMc>(membroMcViewModel));
+            await _membroMcService.Adicionar(_mapper.Map<MembroMc>(membroMcViewModel));
 
             return RedirectToAction("Index");
         }
 
+        [Route("Editar-associado")]
         public async Task<IActionResult> Edit(Guid id)
         {
             var membromc = await ObterMembroContatosEndereco(id);
 
-            if(membromc == null) { return NotFound(); }
+            if (membromc == null) { return NotFound(); }
 
             return View(membromc);
         }
 
+        [Route("Editar-associado")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, MembroMcViewModel membroMcViewModel)
@@ -96,68 +112,82 @@ namespace ScootersMc.App.Controllers
 
             if (!ModelState.IsValid) return View(membroMcViewModel);
 
+            if (membroMcViewModel.ImagemUpload != null)
+            {
+                var imgPrefico = Guid.NewGuid() + "_";
+                if (await UpLoadArquivo(membroMcViewModel.ImagemUpload, imgPrefico))
+                {
+                    return View(membroMcViewModel);
+                }
+            }
+
+            await AtualizarMembroMc(id, membroMcViewModel);
+
+            CalcularIdade(membroMcViewModel);
+
             var membromc = _mapper.Map<MembroMc>(membroMcViewModel);
 
-            await _membrosRepository.Atualizar(membromc);
+            await _membroMcService.Atualizar(membromc);
 
             return RedirectToAction("Index");
         }
 
+        [Route("Excluir-associado")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var membromc = await ObterMembroContatosEndereco(id);
-            
-            if(membromc == null) { return NotFound(); }
+
+            if (membromc == null) { return NotFound(); }
 
 
             return View(membromc);
         }
 
+        [Route("Excluir-associado")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var membromc = ObterMembroContatosEndereco(id);
 
-            if(membromc == null) { return NotFound(); }
+            if (membromc == null) { return NotFound(); }
 
 
-            await _membrosRepository.Remover(id);
+            await _membroMcService.Remover(id);
 
             return RedirectToAction(nameof(Index));
         }
 
 
-        
+
         private async Task<MembroMcViewModel> ObterMembroContatosEndereco(Guid id)
         {
             return _mapper.Map<MembroMcViewModel>(await _membrosRepository.ObterMembroContatosEndereco(id));
         }
 
 
-        private async Task<bool> UpLoadArquivo(IFormFile arquivo , string imgPrefixo)
+        private async Task<bool> UpLoadArquivo(IFormFile arquivo, string imgPrefixo)
         {
-            if(arquivo.Length <=0) return false;
+            if (arquivo.Length <= 0) return false;
 
             var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagens", imgPrefixo + arquivo.FileName);
 
-            if(System.IO.File.Exists(path))
+            if (System.IO.File.Exists(path))
             {
                 ModelState.AddModelError(string.Empty, "Já existe um arquivo com esse nome!");
             }
 
-            using(var steam = new FileStream(path, FileMode.Create))
+            using (var steam = new FileStream(path, FileMode.Create))
             {
                 await arquivo.CopyToAsync(steam);
             }
 
-            return true; 
+            return true;
         }
 
-        protected MembroMcViewModel CalcularIdade(MembroMcViewModel MembroMc)
+        private MembroMcViewModel CalcularIdade(MembroMcViewModel MembroMc)
         {
             DateTime AnoNascimento = MembroMc.DataNascimento;
-            DateTime AnoAtual = DateTime.Now;
             TimeSpan Diferenca = DateTime.Today - AnoNascimento;
             DateTime Idade = (new DateTime() + Diferenca).AddYears(-1).AddDays(-1);
             MembroMc.Idade = Idade.Year;
@@ -165,7 +195,22 @@ namespace ScootersMc.App.Controllers
             return MembroMc;
         }
 
+        private async Task<MembroMcViewModel> AtualizarMembroMc(Guid id, MembroMcViewModel membromc)
+        {
+            var membroAtualizacao = await ObterMembroContatosEndereco(id);
+            membromc.Imagem = membroAtualizacao.Imagem;
 
-      
+            membroAtualizacao.Nome = membromc.Nome;
+            membroAtualizacao.Cpf = membromc.Cpf;
+            membroAtualizacao.Email = membromc.Email;
+            membroAtualizacao.Hierarquia = membromc.Hierarquia;
+            membroAtualizacao.TipoSanguineo = membromc.TipoSanguineo;
+            membroAtualizacao.DataNascimento = membromc.DataNascimento;
+            membroAtualizacao.Telefone = membromc.Telefone;
+            membroAtualizacao.Ativo = membromc.Ativo;
+
+            return membroAtualizacao;
+        }
+
     }
 }

@@ -13,7 +13,7 @@ namespace ScootersMc.App.ViewModels
         [StringLength(100, ErrorMessage = "O campo {0} precisa ter entre {2} e {1} caracteres", MinimumLength = 2)]
         public string Nome { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [Phone(ErrorMessage = "Numero de telefone informado é invalido")]
         public string Telefone { get; set; }
 

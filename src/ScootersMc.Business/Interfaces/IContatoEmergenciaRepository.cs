@@ -9,7 +9,7 @@ namespace ScootersMc.Business.Interfaces
 {
     public interface IContatoEmergenciaRepository : IRepository<ContatoEmergencia>
     {
-        Task<IEnumerable<ContatoEmergencia>> ObterContatoDeEmergenciasPorMembro(Guid MembroId);
+        Task<ContatoEmergencia> ObterContatoDeEmergenciasPorMembro(Guid MembroId);
 
         // Task<IEnumerable<ContatoEmergencia>> ObterContatosDeEmergenciasEMembros();
 

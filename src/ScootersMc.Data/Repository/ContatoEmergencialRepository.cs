@@ -21,9 +21,10 @@ namespace ScootersMc.Data.Repository
                                                      .FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public async Task<IEnumerable<ContatoEmergencia>> ObterContatoDeEmergenciasPorMembro(Guid MembroId)
+        public async Task<ContatoEmergencia> ObterContatoDeEmergenciasPorMembro(Guid MembroId)
         {
-            return await Buscar(c => c.MembroMcId == MembroId);
+            return await _context.ContatosEmegencias.AsNoTracking()
+                                                    .FirstOrDefaultAsync(c => c.MembroMcId == MembroId);
         }
     }
 }

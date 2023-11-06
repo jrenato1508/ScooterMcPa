@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<ScootersMc.App.ViewModels.MembroMcViewModel>
+@using ScootersMc.App.Extension
 
 @{
     ViewData["Title"] = "Lista de Associados";
@@ -47,7 +48,8 @@
                 @Html.DisplayFor(modelItem => item.Hierarquia)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Telefone)
+                @*@Html.DisplayFor(modelItem => item.Telefone)*@
+                @this.FormataTelefone(item.Telefone)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Ativo)

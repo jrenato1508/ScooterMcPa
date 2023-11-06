@@ -4,6 +4,7 @@ using System.Diagnostics;
 
 namespace ScootersMc.App.Controllers
 {
+    
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

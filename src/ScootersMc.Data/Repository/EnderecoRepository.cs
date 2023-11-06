@@ -14,10 +14,10 @@ namespace ScootersMc.Data.Repository
     {
         public EnderecoRepository(MeuDbContext db) : base(db) { }
 
-        public async Task<Endereco> ObeterMembroFornecedorPorMembro(Guid id)
+        public async Task<Endereco> ObeterMembroEnderecoPorMembro(Guid id)
         {
             return await _context.Enderecos.AsNoTracking()
-                                    .FirstOrDefaultAsync(x => x.Id == id);
+                                    .FirstOrDefaultAsync(x => x.MembroMcId == id);
         }
     }
 }

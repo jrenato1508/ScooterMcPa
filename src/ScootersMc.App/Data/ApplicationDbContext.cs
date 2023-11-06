@@ -11,7 +11,5 @@ namespace ScootersMc.App.Data
         {
         }
         
-        
-        
     }
 }
