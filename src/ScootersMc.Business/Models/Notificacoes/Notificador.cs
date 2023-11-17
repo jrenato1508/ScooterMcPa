@@ -30,7 +30,8 @@ namespace ScootersMc.Business.Models.Notificacoes
 
         public bool TemNotificacao()
         {
-            throw new NotImplementedException();
+            return _notificadorList.Any();
+
         }
     }
 }

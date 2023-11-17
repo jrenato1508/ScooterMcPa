@@ -29,7 +29,8 @@ namespace ScootersMc.App.Controllers
         public MembrosMcController(IMembroRepository membroRepository,
                                    IMapper mapper,
                                    IContatoEmergenciaRepository contato,
-                                   IMembroMcService membroMcService)
+                                   IMembroMcService membroMcService,
+                                   INotificador notificador) :base(notificador)
         {
             _membrosRepository = membroRepository;
             _mapper = mapper;
@@ -84,11 +85,17 @@ namespace ScootersMc.App.Controllers
             /* Testar a implementação da imagem - OK
              * Testar a Edição dos Filiados - OK
              * Criei uma razoExtension para formatar telefone e cpf -OK
-             * Testar a Exclusão dos Afiliados(Implementar o Service Primeiro)
+             * Testar a Exclusão dos Afiliados(Implementar o Service Primeiro) - OK
              * Foi feito alguns ajustes das paginas Layout index e Detalhes além de ajustar algumas actions na controller 
+             * Criar a os metodos para notificar os erros encontrados durante a validação(create,edit) - OK
+             * criar um mecanismo para exibir os erros encontrado durante a validação da entida para o usuário.Vamos utilizar um ViewComponent
+             * para mostrar esses erros.(item 35)
               */
 
+
             await _membroMcService.Adicionar(_mapper.Map<MembroMc>(membroMcViewModel));
+
+            if(!OperacaoValida()) return View(membroMcViewModel);
 
             return RedirectToAction("Index");
         }
@@ -129,6 +136,8 @@ namespace ScootersMc.App.Controllers
 
             await _membroMcService.Atualizar(membromc);
 
+            if(!OperacaoValida()) return View(membroMcViewModel);
+
             return RedirectToAction("Index");
         }
 
@@ -154,6 +163,8 @@ namespace ScootersMc.App.Controllers
 
 
             await _membroMcService.Remover(id);
+
+            if (!OperacaoValida()) return View(membromc);
 
             return RedirectToAction(nameof(Index));
         }

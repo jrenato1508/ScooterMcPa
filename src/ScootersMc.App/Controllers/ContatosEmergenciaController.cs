@@ -20,7 +20,8 @@ namespace ScootersMc.App.Controllers
 
 
         public ContatosEmergenciaController(IContatoEmergenciaRepository contato,
-                                            IMapper mapper)
+                                            IMapper mapper,
+                                            INotificador notificador) :base (notificador)
         {
             _contatoEmergenciaRepository = contato;
             _mapper = mapper;
