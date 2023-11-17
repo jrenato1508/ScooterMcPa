@@ -89,7 +89,7 @@ namespace ScootersMc.App.Controllers
              * Foi feito alguns ajustes das paginas Layout index e Detalhes além de ajustar algumas actions na controller 
              * Criar a os metodos para notificar os erros encontrados durante a validação(create,edit) - OK
              * criar um mecanismo para exibir os erros encontrado durante a validação da entida para o usuário.Vamos utilizar um ViewComponent
-             * para mostrar esses erros.(item 35)
+             * para mostrar esses erros.(item 35) -OK Falta testar
               */
 
 
