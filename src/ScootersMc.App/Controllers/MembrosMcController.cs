@@ -69,7 +69,7 @@ namespace ScootersMc.App.Controllers
         public async Task<IActionResult> Create(MembroMcViewModel membroMcViewModel)
         {
 
-            if (!ModelState.IsValid) return NotFound();
+            if (!ModelState.IsValid) return View(membroMcViewModel);
 
             CalcularIdade(membroMcViewModel);
 

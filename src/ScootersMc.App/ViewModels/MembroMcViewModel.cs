@@ -9,6 +9,7 @@ namespace ScootersMc.App.ViewModels
         [Key]
         public Guid Id { get; set; }
 
+        
         public string Imagem { get; set; }
 
         [DisplayName("Imagem do Produto")]

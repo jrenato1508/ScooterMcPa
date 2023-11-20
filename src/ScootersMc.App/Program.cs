@@ -17,17 +17,17 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddControllersWithViews();
 
 
-//Configuração do RazorPagesRuntime
+//Configuraï¿½ï¿½o do RazorPagesRuntime
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 
-// Configuração do DBContext
+// Configuraï¿½ï¿½o do DBContext
 builder.Services.AddDbContext<MeuDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-//Configuraçã das DI(Injection Dependency)
+//Configuraï¿½ï¿½ das DI(Injection Dependency)
 builder.Services.ResolveDependencies();
 
-// Configuração do Automapper
+// Configuraï¿½ï¿½o do Automapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
@@ -43,11 +43,13 @@ builder.Configuration
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseMigrationsEndPoint();
 }
 else
 {
     app.UseExceptionHandler("/Home/Error");
+    app.UseStatusCodePagesWithRedirects("/erro/{0}");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
